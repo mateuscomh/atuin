@@ -109,9 +109,9 @@ pub enum Cmd {
         format: Option<String>,
     },
 
-    /// Delete history entries matching the configured exclusion filters
     InitStore,
 
+    /// Delete history entries matching the configured exclusion filters
     Prune {
         /// List matching history lines without performing the actual deletion.
         #[arg(short = 'n', long)]
