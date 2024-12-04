@@ -334,12 +334,20 @@ impl State {
                     return self.handle_search_up(settings, true);
                 }
                 KeyCode::Char('h') if !ctrl => {
-                    self.search.input.left();
-                    return InputAction::Continue;
+                    if cursor_at_start_of_line {
+                        return Self::handle_key_exit(settings);
+                    } else {
+                        self.search.input.left();
+                        return InputAction::Continue;
+                    }
                 }
                 KeyCode::Char('l') if !ctrl => {
-                    self.search.input.right();
-                    return InputAction::Continue;
+                    if cursor_at_end_of_line {
+                        return InputAction::Accept(self.results_state.selected());
+                    } else {
+                        self.search.input.right();
+                        return InputAction::Continue;
+                    }
                 }
                 KeyCode::Char('a') if !ctrl => {
                     self.search.input.right();
@@ -378,6 +386,7 @@ impl State {
             }
             _ => {}
         }
+
 
         match input.code {
             KeyCode::Enter => return self.handle_search_accept(settings),
